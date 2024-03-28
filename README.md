@@ -7,6 +7,10 @@ This tool enables you to set and obtain the brightness level of all
 internal and certain external displays from the command line or a
 script.
 
+This fork of [Nicholas Riley’s tool](https://github.com/nriley/brightness) 
+simplifies the output of the `-l` option to outputting just the brightness 
+value of the display(s).
+
 <table><tr><th> If you cannot control your display’s brightness from
 Displays System Preferences, you will not be able to do it with
 <tt>brightness</tt>. See <a
@@ -14,16 +18,11 @@ href="https://github.com/nriley/brightness/issues/11">this issue</a>
 for more information and some potential other options.
 </th></tr></table>
 
-Install with Homebrew
---------------------
-
-```brew install brightness```
-
 Install From Source
 ------------------
 
 ```shell
-git clone https://github.com/nriley/brightness.git
+git clone https://github.com/jazzace/brightness.git
 cd brightness
 make
 sudo make install
@@ -80,7 +79,6 @@ display 1: active, awake, online, external, ID 0x3f003f
 brightness: unable to get brightness of display 0x3f003f
 % brightness -m 0.6
 % brightness -l    
-display 0: main, active, awake, online, external, ID 0x1b56353c
-display 0: brightness 0.600000
+0.600000
 [...]
 ````

@@ -4,6 +4,16 @@
 #include <IOKit/graphics/IOGraphicsLib.h>
 #include <ApplicationServices/ApplicationServices.h>
 
+/* This fork (jazzace, a.k.a. Anthony Reimer): 
+   Single value output when non-verbose (so it can be saved to file
+   and subsequently ingested to reset the brightness to that value).
+   
+   To Do: Currently, it only outputs to stdout the brightness value(s)
+   it can read. Ideally, we should be able to specify the display
+   for which we want to read the brightness, or at least output something
+   to stdout so that the brightness values for each display are output
+   sequentially even if one of the values is an error flag.
+*/
 /* As of macOS 10.12.4, brightness set by public IOKit API is
    overridden by CoreDisplay's brightness (to support Night Shift). In
    addition, using CoreDisplay to get brightness supports additional
@@ -276,17 +286,17 @@ int main(int argc, char * const argv[]) {
       continue;
 
     if (action == ACTION_LIST) {
-      printf("display %d: ", i);
-      if (CGDisplayIsMain(dspy))
-	printf("main, ");
-      printf("%sactive, %s, %sline, %s%s",
-             CGDisplayIsActive(dspy) ? "" : "in",
-             CGDisplayIsAsleep(dspy) ? "asleep" : "awake",
-             CGDisplayIsOnline(dspy) ? "on" : "off",
-             CGDisplayIsBuiltin(dspy) ? "built-in" : "external",
-             CGDisplayIsStereo(dspy) ? ", stereo" : "");
-      printf(", ID 0x%x\n", (unsigned int)dspy);
       if (verbose) {
+		  printf("display %d: ", i);
+		  if (CGDisplayIsMain(dspy))
+		printf("main, ");
+		  printf("%sactive, %s, %sline, %s%s",
+				 CGDisplayIsActive(dspy) ? "" : "in",
+				 CGDisplayIsAsleep(dspy) ? "asleep" : "awake",
+				 CGDisplayIsOnline(dspy) ? "on" : "off",
+				 CGDisplayIsBuiltin(dspy) ? "built-in" : "external",
+				 CGDisplayIsStereo(dspy) ? ", stereo" : "");
+		  printf(", ID 0x%x\n", (unsigned int)dspy);
         CGRect bounds = CGDisplayBounds(dspy);
         printf("\tresolution %.0f x %.0f pt",
                bounds.size.width, bounds.size.height);
@@ -333,7 +343,10 @@ int main(int argc, char * const argv[]) {
       if (!verbose) continue;
     case ACTION_LIST:
       if (!getBrightness(dspy, service, &brightness)) continue;
-      printf("display %d: brightness %f\n", i, brightness);
+      if (verbose) {
+		  printf("display %d: brightness", i);
+		  }
+      printf("%f\n", brightness);
     }
   }
 
