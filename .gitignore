@@ -23,3 +23,5 @@ brightness
 
 #CocoaPods
 Pods
+brightness.arm64
+brightness.x86_64
